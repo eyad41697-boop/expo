@@ -1,0 +1,177 @@
+// === SarfCar React Native App (Expo Ready) ===
+// احفظه باسم App.js داخل مشروع Expo
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+
+const Stack = createNativeStackNavigator();
+
+// ---------------- Sample Data ----------------
+const data = {
+  tow: [
+    { id: 't1', name: 'ونش السريع', phone: '+966550000001', city: 'أبها', price: 120 },
+    { id: 't2', name: 'ونش السعودية', phone: '+966550000002', city: 'جدة', price: 140 }
+  ],
+  workshops: [
+    { id: 'w1', name: 'ورشة التميز', services: ['ميكانيكا', 'كهرباء'], rating: 4.7 },
+    { id: 'w2', name: 'ورشة النخبة', services: ['هيكل', 'بلاك'], rating: 4.5 }
+  ],
+  parts: [
+    { id: 'p1', title: 'فلتر هواء', brand: 'ماركة A', price: 80, qty: 12 },
+    { id: 'p2', title: 'بطارية 12V', brand: 'ماركة B', price: 420, qty: 5 }
+  ],
+  washes: [
+    { id: 'c1', name: 'مغسلة اللمعة', city: 'جدة', price: 50 },
+    { id: 'c2', name: 'مغسلة البرو', city: 'الدمام', price: 60 }
+  ]
+};
+
+// ---------------- Reusable Card ----------------
+function Card({ children }) {
+  return <View style={styles.card}>{children}</View>;
+}
+
+function Home({ navigation }) {
+  return (
+    <ScrollView style={styles.container}>
+      <Card>
+        <Text style={styles.title}>مرحباً بك في سيرف كار 🚗</Text>
+        <Text style={styles.text}>اختَر الخدمة التي تحتاجها.</Text>
+      </Card>
+
+      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Tow')}>
+        <Text style={styles.btnText}>الونشات</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Workshops')}>
+        <Text style={styles.btnText}>الورش</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Parts')}>
+        <Text style={styles.btnText}>قطع الغيار</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Washes')}>
+        <Text style={styles.btnText}>مغاسل السيارات</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
+
+function Tow() {
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.sectionTitle}>الونشات</Text>
+      {data.tow.map(t => (
+        <Card key={t.id}>
+          <Text style={styles.title}>{t.name} — {t.city}</Text>
+          <Text style={styles.text}>السعر: {t.price} ريال</Text>
+          <Text style={styles.text}>الهاتف: {t.phone}</Text>
+        </Card>
+      ))}
+    </ScrollView>
+  );
+}
+
+function Workshops() {
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.sectionTitle}>الورش</Text>
+      {data.workshops.map(w => (
+        <Card key={w.id}>
+          <Text style={styles.title}>{w.name}</Text>
+          <Text style={styles.text}>الخدمات: {w.services.join('، ')}</Text>
+          <Text style={styles.text}>التقييم: {w.rating}</Text>
+        </Card>
+      ))}
+    </ScrollView>
+  );
+}
+
+function Parts() {
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.sectionTitle}>قطع الغيار</Text>
+      {data.parts.map(p => (
+        <Card key={p.id}>
+          <Text style={styles.title}>{p.title} - {p.brand}</Text>
+          <Text style={styles.text}>السعر: {p.price} ريال</Text>
+          <Text style={styles.text}>الكمية: {p.qty}</Text>
+        </Card>
+      ))}
+    </ScrollView>
+  );
+}
+
+function Washes() {
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.sectionTitle}>مغاسل السيارات</Text>
+      {data.washes.map(w => (
+        <Card key={w.id}>
+          <Text style={styles.title}>{w.name} — {w.city}</Text>
+          <Text style={styles.text}>السعر: {w.price} ريال</Text>
+        </Card>
+      ))}
+    </ScrollView>
+  );
+}
+
+// ---------------- App Main ----------------
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} options={{ title: 'سيرف كار' }} />
+        <Stack.Screen name="Tow" component={Tow} options={{ title: 'الونشات' }} />
+        <Stack.Screen name="Workshops" component={Workshops} options={{ title: 'الورش' }} />
+        <Stack.Screen name="Parts" component={Parts} options={{ title: 'قطع الغيار' }} />
+        <Stack.Screen name="Washes" component={Washes} options={{ title: 'مغاسل السيارات' }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+// ---------------- Styles ----------------
+const styles = StyleSheet.create({
+  container: {
+    padding: 15,
+    backgroundColor: '#f5f5f5'
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  text: {
+    fontSize: 14,
+    marginTop: 4
+  },
+  sectionTitle: {
+    fontSize: 20,
+    marginBottom: 10,
+    fontWeight: 'bold'
+  },
+  btn: {
+    padding: 15,
+    backgroundColor: '#1e88e5',
+    borderRadius: 12,
+    marginBottom: 12
+  },
+  btnText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center'
+  }
+});
